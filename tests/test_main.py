@@ -1,23 +1,26 @@
 import cv2
 import glob
+import os
 import unittest
 from src.main import get_most_similar_image
 
 
 class TestMain(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """Load the test image files before running tests"""
-        query_ident_filenames = glob.glob('test_images/query_identical_images/*.jpg')
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        query_ident_filenames = glob.glob(os.path.join(current_dir, 'test_images', 'query_identical_images', '*.jpg'))
         query_ident_filenames.sort()
-        self.query_identical_images = [cv2.imread(filename) for filename in query_ident_filenames if cv2.imread(filename) is not None]
+        cls.query_identical_images = [cv2.imread(filename) for filename in query_ident_filenames if cv2.imread(filename) is not None]
 
-        query_sim_filenames = glob.glob('test_images/query_similar_images/*.jpg')
+        query_sim_filenames = glob.glob(os.path.join(current_dir, 'test_images', 'query_similar_images', '*.jpg'))
         query_sim_filenames.sort()
-        self.query_similar_images = [cv2.imread(filename) for filename in query_sim_filenames if cv2.imread(filename) is not None]
+        cls.query_similar_images = [cv2.imread(filename) for filename in query_sim_filenames if cv2.imread(filename) is not None]
 
-        candidate_filenames = glob.glob('test_images/candidate_images/*.jpg')
+        candidate_filenames = glob.glob(os.path.join(current_dir, 'test_images', 'candidate_images', '*.jpg'))
         candidate_filenames.sort()
-        self.candidate_images = [cv2.imread(filename) for filename in candidate_filenames if cv2.imread(filename) is not None]
+        cls.candidate_images = [cv2.imread(filename) for filename in candidate_filenames if cv2.imread(filename) is not None]
 
     def test_identical_image_A(self):
         """Test search with image identical to candidate Image A"""
